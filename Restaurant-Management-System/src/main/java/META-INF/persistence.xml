@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+	<persistence-unit name="Restaurant-Management-System">
+		<class>com.restaurantorders.models.Booking</class>
+		<class>com.restaurantorders.models.Customers</class>
+		<class>com.restaurantorders.models.Employees</class>
+		<class>com.restaurantorders.models.Foods</class>
+		<class>com.restaurantorders.models.Items</class>
+		<class>com.restaurantorders.models.Jobs</class>
+		<class>com.restaurantorders.models.Orders</class>
+		<class>com.restaurantorders.models.Tables</class>
+	</persistence-unit>
+</persistence>
