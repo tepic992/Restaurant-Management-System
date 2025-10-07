@@ -1,1 +1,59 @@
-<p>customers works!</p>
+<mat-toolbar color="primary">
+    <span class="title-center">Customers</span>
+  </mat-toolbar>
+  
+  <div class="container mat-elevation-z8">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Filter">
+    </mat-form-field>
+    <mat-table [dataSource]="dataSource" class="mat-cell" matSort>
+  
+      <ng-container matColumnDef="customerId">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>CustomerId</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.customerId}}</mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="customerAddress">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>CustomerAddress</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.customerAddress}}</mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="customerLastName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>CustomerLastName</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.customerLastName}}</mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="customerName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>CustomerName</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.customerName}}</mat-cell>
+      </ng-container>
+      
+      <ng-container matColumnDef="customerPhone">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>CustomerPhone</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.customerPhone}}</mat-cell>
+      </ng-container>
+    
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>
+          <button mat-icon-button color="primary" (click)="openDialog(1, null, null, null, null, null)">
+            <mat-icon aria-label="Add">add</mat-icon>
+          </button>
+        </mat-header-cell>
+        
+        <mat-cell *matCellDef="let row">
+          <button mat-icon-button color="primary" (click)="openDialog(2, row.customerId, row.customerAddress, row.customerLastName, row.customerName, row.customerPhone)">
+            <mat-icon aria-label="Edit">edit</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="openDialog(3, row.customerId, row.customerAddress, row.customerLastName, row.customerName, row.customerPhone)">
+            <mat-icon aria-label="Delete">delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row style="cursor: default" *matRowDef="let row; columns: displayedColumns"></mat-row>
+  
+    </mat-table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true"></mat-paginator>
+  </div>
+

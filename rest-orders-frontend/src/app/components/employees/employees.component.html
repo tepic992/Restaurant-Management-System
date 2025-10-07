@@ -1,1 +1,69 @@
-<p>employees works!</p>
+<mat-toolbar color="primary">
+    <span class="title-center">Employees</span>
+  </mat-toolbar>
+  
+  <div class="container mat-elevation-z8">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Filter">
+    </mat-form-field>
+    <mat-table [dataSource]="dataSource" class="mat-cell" matSort>
+  
+      <ng-container matColumnDef="employeeId">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>EmployeeId</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.employeeId}}</mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="employeeAddress">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>EmployeeAddress</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.employeeAddress}}</mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="employeeLastName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>EmployeeLastName</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.employeeLastName}}</mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="employeeName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>EmployeeName</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.employeeName}}</mat-cell>
+      </ng-container>
+      
+      <ng-container matColumnDef="employeePhone">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>EmployeePhone</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.employeePhone}}</mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="employeeSalary">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>EmployeeSalary</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.employeeSalary}} RSD</mat-cell>
+      </ng-container>
+      
+      <ng-container matColumnDef="jobs">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Job</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.job.jobTitle}}</mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>
+          <button mat-icon-button color="primary" (click)="openDialog(1, null, null, null, null, null, null, null)">
+            <mat-icon aria-label="Add">add</mat-icon>
+          </button>
+        </mat-header-cell>
+        
+        <mat-cell *matCellDef="let row">
+          <button mat-icon-button color="primary" (click)="openDialog(2, row.employeeId, row.employeeAddress, row.employeeLastName, row.employeeName, row.employeePhone, row.employeeSalary, row.job)">
+            <mat-icon aria-label="Edit">edit</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="openDialog(3, row.employeeId, row.employeeAddress, row.employeeLastName, row.employeeName, row.employeePhone, row.employeeSalary, row.job)">
+            <mat-icon aria-label="Delete">delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row style="cursor: default" *matRowDef="let row; columns: displayedColumns"></mat-row>
+  
+    </mat-table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true"></mat-paginator>
+  </div>
+
