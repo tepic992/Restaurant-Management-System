@@ -1,37 +1,54 @@
 <div class="container">
-    <h3 mat-dialog-title *ngIf="flag == 1">Employee creation</h3>
-    <h3 mat-dialog-title *ngIf="flag == 2">Employee modification: {{data.employeeId}}</h3>
-    <h3 mat-dialog-title *ngIf="flag == 3">Deleting a Employee {{data.employeeId}}</h3>
-    <form class="mat-dialog-content" #formControl="ngForm">
-      <div class="form">
-        <mat-form-field>
-          <input matInput placeholder="EmployeeName" [(ngModel)]="data.employeeName" name="employeeName" [disabled] = "flag == 3" required>
-        </mat-form-field>
-      </div>
-      <div class="form">
-        <mat-form-field>
-          <input matInput placeholder="EmployeeLastName" [(ngModel)]="data.employeeLastName" name="employeeLastName" [disabled] = "flag == 3" required>
-        </mat-form-field>
-      </div>
-      <div class="form">
-        <mat-form-field>
-          <input matInput placeholder="EmployeePhone" [(ngModel)]="data.employeePhone" name="employeePhone" [disabled] = "flag == 3" required>
-        </mat-form-field>
-      </div>
-      <div class="form">
-        <mat-form-field>
-          <input matInput placeholder="EmployeeAddress" [(ngModel)]="data.employeeAddress" name="employeeAddress" [disabled] = "flag == 3" required>
-        </mat-form-field>
-      </div>
-      <div class="form">
-      <div mat-dialog-actions>
-        <button mat-button *ngIf="flag == 1" type="submit" [mat-dialog-close]="1"
-        (click)="add()" [disabled]="!formControl.valid">Save</button>
-        <button mat-button *ngIf="flag == 2" type="submit" [mat-dialog-close]="1"
-        (click)="update()" [disabled]="!formControl.valid">Save</button>
-        <button mat-button *ngIf="flag == 3" type="submit" [mat-dialog-close]="1"
-        (click)="delete()">Delete</button>
-        <button mat-button (click)="cancel()">Cancel</button>
-      </div>
-  </div>
-
+  <h3 mat-dialog-title *ngIf="flag == 1">Employee creation</h3>
+  <h3 mat-dialog-title *ngIf="flag == 2">Employee modification: {{data.employeeId}}</h3>
+  <h3 mat-dialog-title *ngIf="flag == 3">Deleting an Employee {{data.employeeId}}</h3>
+  
+  <form class="mat-dialog-content" #formControl="ngForm">
+    <div class="form">
+      <mat-form-field>
+        <input matInput placeholder="EmployeeName" [(ngModel)]="data.employeeName" name="employeeName" [disabled]="flag == 3" required>
+      </mat-form-field>
+    </div>
+    
+    <div class="form">
+      <mat-form-field>
+        <input matInput placeholder="EmployeeLastName" [(ngModel)]="data.employeeLastName" name="employeeLastName" [disabled]="flag == 3" required>
+      </mat-form-field>
+    </div>
+    
+    <div class="form">
+      <mat-form-field>
+        <input matInput type="number" placeholder="EmployeePhone" [(ngModel)]="data.employeePhone" name="employeePhone" [disabled]="flag == 3" required>
+      </mat-form-field>
+    </div>
+    
+    <div class="form">
+      <mat-form-field>
+        <input matInput placeholder="EmployeeAddress" [(ngModel)]="data.employeeAddress" name="employeeAddress" [disabled]="flag == 3" required>
+      </mat-form-field>
+    </div>
+    
+    <div class="form">
+      <mat-form-field>
+        <input matInput type="number" placeholder="EmployeeSalary" [(ngModel)]="data.employeeSalary" name="employeeSalary" [disabled]="flag == 3" required min="0">
+      </mat-form-field>
+    </div>
+    
+    <div class="form">
+      <mat-form-field>
+        <mat-select placeholder="Job" [(ngModel)]="data.job" name="job" [disabled]="flag == 3" required [compareWith]="compareTo">
+          <mat-option *ngFor="let j of jobs" [value]="j">
+            {{ j.jobTitle }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    
+    <div mat-dialog-actions>
+      <button mat-button *ngIf="flag == 1" type="submit" [mat-dialog-close]="1" (click)="add()" [disabled]="!formControl.valid">Save</button>
+      <button mat-button *ngIf="flag == 2" type="submit" [mat-dialog-close]="1" (click)="update()" [disabled]="!formControl.valid">Save</button>
+      <button mat-button *ngIf="flag == 3" type="submit" [mat-dialog-close]="1" (click)="delete()">Delete</button>
+      <button mat-button (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>

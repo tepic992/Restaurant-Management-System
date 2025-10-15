@@ -27,7 +27,7 @@ public class Tables implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="TABLES_TABLEID_GENERATOR", sequenceName="TABLE_SEQUENCE", allocationSize=1)
+	@SequenceGenerator(name="TABLES_TABLEID_GENERATOR", sequenceName="TABLES_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="TABLES_TABLEID_GENERATOR")
 	@Column(name="table_id")
 	private Integer tableId;

@@ -8,7 +8,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 })
 export class ItemsService {
 
-  private readonly API_URL = "http://localhost:8082/items";
+  private readonly API_URL = "http://localhost:8082/items/";
   dataChange: BehaviorSubject<Items[]> = new BehaviorSubject<Items[]>([]);
   
   constructor(private httpClient: HttpClient) { }

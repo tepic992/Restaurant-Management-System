@@ -1,26 +1,45 @@
 <div class="container">
-    <h3 mat-dialog-title *ngIf="flag == 1">Items creation</h3>
-    <h3 mat-dialog-title *ngIf="flag == 2">Items modification: {{data.itemId}}</h3>
-    <h3 mat-dialog-title *ngIf="flag == 3">Deleting a Item {{data.itemId}}</h3>
-    <form class="mat-dialog-content" #formControl="ngForm">
-      <div class="form">
-        <mat-form-field>
-          <input matInput placeholder="Quantity" [(ngModel)]="data.quantity" name="quantity" [disabled] = "flag == 3" required>
-        </mat-form-field>
-      </div>
-      <div class="form">
-        <mat-form-field>
-          <input matInput placeholder="Food" [(ngModel)]="data.food" name="food" [disabled] = "flag == 3" required>
-        </mat-form-field>
-      </div>
-      <div class="form">
-      <div mat-dialog-actions>
-        <button mat-button *ngIf="flag == 1" type="submit" [mat-dialog-close]="1"
-        (click)="add()" [disabled]="!formControl.valid">Save</button>
-        <button mat-button *ngIf="flag == 2" type="submit" [mat-dialog-close]="1"
-        (click)="update()" [disabled]="!formControl.valid">Save</button>
-        <button mat-button *ngIf="flag == 3" type="submit" [mat-dialog-close]="1"
-        (click)="delete()">Delete</button>
-        <button mat-button (click)="cancel()">Cancel</button>
-      </div>
-  </div>
+  <h3 mat-dialog-title *ngIf="flag == 1">Items creation</h3>
+  <h3 mat-dialog-title *ngIf="flag == 2">Items modification: {{data.itemId}}</h3>
+  <h3 mat-dialog-title *ngIf="flag == 3">Deleting a Item {{data.itemId}}</h3>
+
+  <form class="mat-dialog-content" #formControl="ngForm">
+    <div class="form">
+      <mat-form-field>
+        <input matInput placeholder="Quantity" type="number" [(ngModel)]="data.quantity" name="quantity" [disabled]="flag == 3" required min="1">
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field>
+        <mat-label>Food</mat-label>
+        <mat-select [(ngModel)]="data.food" name="food" [disabled]="flag == 3" required [compareWith]="compareFood">
+          <mat-option *ngFor="let f of foods" [value]="f">
+            {{f.foodName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field>
+        <mat-label>Order</mat-label>
+        <mat-select [(ngModel)]="data.order" name="order" [disabled]="flag == 3" required [compareWith]="compareOrder">
+          <mat-option *ngFor="let o of orders" [value]="o">
+            {{o.orderId}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div mat-dialog-actions>
+      <button mat-button *ngIf="flag == 1" type="submit" [mat-dialog-close]="1"
+              (click)="add()" [disabled]="!formControl.valid">Save</button>
+      <button mat-button *ngIf="flag == 2" type="submit" [mat-dialog-close]="1"
+              (click)="update()" [disabled]="!formControl.valid">Save</button>
+      <button mat-button *ngIf="flag == 3" type="submit" [mat-dialog-close]="1"
+              (click)="delete()">Delete</button>
+      <button mat-button (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>

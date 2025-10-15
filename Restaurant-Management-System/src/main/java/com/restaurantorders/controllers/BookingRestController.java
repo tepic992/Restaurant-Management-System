@@ -2,6 +2,7 @@ package com.restaurantorders.controllers;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,11 +40,13 @@ public class BookingRestController {
 		return bookingRepository.findAll();
 	}
 	
-	@ApiOperation(value = "Returns Booking with id that was forwarded as path variable")
-	@GetMapping("booking/{booking_id}")
+	
+    @ApiOperation(value = "Returns Booking with id that was forwarded as path variable")
+	
+    @GetMapping("booking/{booking_id}")
 	public ResponseEntity<Booking> getFood(@PathVariable("booking_id") Integer id){
 		if (bookingRepository.findById(id).isPresent()) {
-			Booking books = bookingRepository.getOne(id);
+			Booking books = bookingRepository.findById(id).get();
 			return new ResponseEntity<>(books, HttpStatus.OK);
 		}
 
@@ -51,7 +54,6 @@ public class BookingRestController {
 
 	}
 	
-
 	@PostMapping("booking")
 	public ResponseEntity<Booking> addOne(@RequestBody Booking book){
 		Booking savedBooking = bookingRepository.save(book);
@@ -60,14 +62,15 @@ public class BookingRestController {
 	}
 	
 	@PutMapping("booking/{booking_id}")
-	public ResponseEntity<Booking> update(@PathVariable("booking_id") Integer id,
-			@RequestBody Booking bookings){
-		if(bookingRepository.existsById(id)) {
-			bookings.setBookingId(id);
-			Booking savedBooking = bookingRepository.save(bookings);
-			return ResponseEntity.ok().body(savedBooking);
-		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<Booking> updateBooking(@PathVariable("booking_id") Integer id,
+	                                             @RequestBody Booking updatedBooking) {
+	    if (bookingRepository.existsById(id)) {
+	        updatedBooking.setBookingId(id);
+	        Booking saved = bookingRepository.save(updatedBooking);
+	        return ResponseEntity.ok(saved);
+	    } else {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	    }
 	}
 
 	@DeleteMapping("booking/{booking_id}")
@@ -86,8 +89,6 @@ public class BookingRestController {
 		}
 
 		return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
-
-
 
 	}
 

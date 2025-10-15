@@ -42,7 +42,7 @@ public class JobRestController {
 		public ResponseEntity<Jobs> getOne(@PathVariable("job_id") Integer id) {
 
 			if (jobRepository.findById(id).isPresent()) {
-				Jobs job = jobRepository.getOne(id);
+				Jobs job = jobRepository.findById(id).get();
 				return new ResponseEntity<>(job, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -72,7 +72,7 @@ public class JobRestController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		@DeleteMapping("jobs/{job_id}")
+		@DeleteMapping("jobs/{id}")
 		public ResponseEntity<HttpStatus> delete(@PathVariable Integer id){
 			if(id==-100 && !jobRepository.existsById(id)) {
 				jdbcTemplate.execute("INSERT INTO jobs (\"job_id\",\"job_title\")"

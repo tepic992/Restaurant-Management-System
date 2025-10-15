@@ -43,7 +43,7 @@ public class TableRestController {
 		@GetMapping("tables/{table_id}")
 		public ResponseEntity<Tables> getTable(@PathVariable("table_id") Integer id){
 			if (tableRepository.findById(id).isPresent()) {
-				Tables tbl = tableRepository.getOne(id);
+				Tables tbl = tableRepository.findById(id).get();
 				return new ResponseEntity<>(tbl, HttpStatus.OK);
 			}
 

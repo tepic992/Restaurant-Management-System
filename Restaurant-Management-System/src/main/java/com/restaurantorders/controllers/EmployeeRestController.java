@@ -2,6 +2,7 @@ package com.restaurantorders.controllers;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,10 +41,11 @@ public class EmployeeRestController {
 	}
 	
 	@ApiOperation(value = "Returns Employee with id that was forwarded as path variable")
+	
 	@GetMapping("employees/{employee_id}")
 	public ResponseEntity<Employees> getEmployee(@PathVariable("employee_id") Integer id){
 		if (emplRepository.findById(id).isPresent()) {
-			Employees empl = emplRepository.getOne(id);
+			Employees empl = emplRepository.findById(id).get();
 			return new ResponseEntity<>(empl, HttpStatus.OK);
 		}
 
@@ -59,38 +61,39 @@ public class EmployeeRestController {
 		return ResponseEntity.created(location).body(savedEmployees);
 	}
 	
-	@PutMapping("employees/{employee_id}")
-	public ResponseEntity<Employees> update(@PathVariable("employee_id") Integer id,
-			@RequestBody Employees empl){
-		if(emplRepository.existsById(id)) {
-			empl.setEmployeeId(id);
-			Employees savedEmpl = emplRepository.save(empl);
-			return ResponseEntity.ok().body(savedEmpl);
-		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	
+	@PutMapping("/employees/{employee_id}")
+	public ResponseEntity<Employees> updateEmployee(@PathVariable("employee_id") Integer id,
+	                                                @RequestBody Employees newData) {
+	    Optional<Employees> optionalEmployee = emplRepository.findById(id);
+
+	    if (optionalEmployee.isPresent()) {
+	        Employees existingEmployee = optionalEmployee.get();
+
+	        // Update fields manually
+	        existingEmployee.setEmployeeName(newData.getEmployeeName());
+	        existingEmployee.setEmployeeLastName(newData.getEmployeeLastName());
+	        existingEmployee.setEmployeeAddress(newData.getEmployeeAddress());
+	        existingEmployee.setEmployeePhone(newData.getEmployeePhone());
+	        existingEmployee.setEmployeeSalary(newData.getEmployeeSalary());
+	        // existingEmployee.setPosition(newData.getPosition());
+
+	        // Save the updated entity
+	        Employees savedEmployee = emplRepository.save(existingEmployee);
+	        return ResponseEntity.ok(savedEmployee);
+	    }
+
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
-
-	@DeleteMapping("employees/{employee_id}")
-	public ResponseEntity<HttpStatus> delete(@PathVariable Integer id){
-
-		if(id == -100 && !emplRepository.existsById(-100)) {
-
-			jdbcTemplate.execute("INSERT INTO employees "
-					+ "(\"employee_id\", \"employee_address\", \"employee_last_name\", \"employee_name\","
-					+ " \"employee_phone\", \"employee_salary\") "
-					+ "VALUES ('-100', 'Not exists 3', 'Null', "
-					+ " 'Null', '7647445', '0000')");
-		}
-
-		if (emplRepository.existsById(id)) {
-			emplRepository.deleteById(id);
-			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-		}
-
-		return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
-
-
-
+	
+	@DeleteMapping("/employees/{employee_id}")
+	public ResponseEntity<Void> deleteEmployee(@PathVariable("employee_id") Integer id) {
+	    if (emplRepository.existsById(id)) {
+	        emplRepository.deleteById(id);
+	        return ResponseEntity.ok().build();
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
 	}
 
 }

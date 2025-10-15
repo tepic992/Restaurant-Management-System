@@ -40,7 +40,7 @@ public class OrderRestController {
 	public ResponseEntity<Orders> getOne(@PathVariable("order_id") Integer id) {
 
 		if (orderRepository.findById(id).isPresent()) {
-			Orders order = orderRepository.getOne(id);
+			Orders order = orderRepository.findById(id).get();
 			return new ResponseEntity<>(order, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

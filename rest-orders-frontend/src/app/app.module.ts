@@ -11,6 +11,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -96,7 +98,9 @@ import { ItemsDialogComponent } from './dialogs/items-dialog/items-dialog.compon
     HttpClientModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatInputModule    
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule
   ],
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
   JobsService,

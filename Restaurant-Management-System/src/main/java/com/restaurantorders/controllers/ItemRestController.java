@@ -42,7 +42,7 @@ public class ItemRestController {
 	@GetMapping("items/{item_id}")
 	public ResponseEntity<Items> getItem(@PathVariable("item_id") Integer id){
 		if (itemRepository.findById(id).isPresent()) {
-			Items items = itemRepository.getOne(id);
+			Items items = itemRepository.findById(id).get();
 			return new ResponseEntity<>(items, HttpStatus.OK);
 		}
 
@@ -69,7 +69,7 @@ public class ItemRestController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
-	@DeleteMapping("items/{item_id}")
+	@DeleteMapping("items/{id}")
 	public ResponseEntity<HttpStatus> delete(@PathVariable Integer id){
 
 		if(id == -100 && !itemRepository.existsById(-100)) {

@@ -1,8 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Foods } from 'src/app/models/foods';
 import { Items } from 'src/app/models/items';
 import { Orders } from 'src/app/models/orders';
+import { FoodsService } from 'src/app/services/foods.service';
 import { ItemsService } from 'src/app/services/items.service';
 import { OrdersService } from 'src/app/services/orders.service';
 
@@ -11,23 +13,25 @@ import { OrdersService } from 'src/app/services/orders.service';
   templateUrl: './items-dialog.component.html',
   styleUrls: ['./items-dialog.component.css']
 })
-export class ItemsDialogComponent implements OnInit{
-
+export class ItemsDialogComponent implements OnInit {
 
   public flag: number;
 
-  orders: Orders[];
+  foods: Foods[] = [];
+  orders: Orders[] = [];
 
-  constructor(public snackBar: MatSnackBar,
-              public dialogRef: MatDialogRef<ItemsDialogComponent>,
-              @Inject(MAT_DIALOG_DATA)
-              public data: Items,
-              public itemsService: ItemsService,
-              public ordersService: OrdersService ) { }
+  constructor(
+    public snackBar: MatSnackBar,
+    public dialogRef: MatDialogRef<ItemsDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: Items,
+    public itemsService: ItemsService,
+    public foodsService: FoodsService,
+    public ordersService: OrdersService
+  ) {}
 
   ngOnInit(): void {
-    this.ordersService.getAllOrders().subscribe((orders: Orders[]) =>
-    this.orders = orders);
+    this.foodsService.getAllFoods().subscribe(foods => this.foods = foods);
+    this.ordersService.getAllOrders().subscribe(orders => this.orders = orders);
   }
 
   public add(): void {
@@ -37,25 +41,24 @@ export class ItemsDialogComponent implements OnInit{
 
   public update(): void {
     this.itemsService.updateItem(this.data);
-    this.snackBar.open('Uspešno izmenjen predmet ' + this.data.itemId, "U redu", {duration: 2000});
+    this.snackBar.open('Uspešno izmenjen predmet ' + this.data.itemId, 'U redu', {duration: 2000});
   }
 
   public delete(): void {
     this.itemsService.deleteItem(this.data.itemId);
-    this.snackBar.open("Uspešno obrisan predmet ' " + this.data.itemId, "U redu", {duration: 2000});
+    this.snackBar.open('Uspešno obrisan predmet ' + this.data.itemId, 'U redu', {duration: 2000});
   }
 
   public cancel(): void {
     this.dialogRef.close();
-    this.snackBar.open("Odustali ste", 'U redu', {duration:2000});
+    this.snackBar.open('Odustali ste', 'U redu', {duration: 2000});
   }
 
-  compareTo(a: any, b: any) {
-    if (a === null || b === null) {
-      return false;
-    }
-    return a.id === b.id;
+  compareFood(a: Foods, b: Foods): boolean {
+    return a && b ? a.foodId === b.foodId : a === b;
   }
 
-
+  compareOrder(a: Orders, b: Orders): boolean {
+    return a && b ? a.orderId === b.orderId : a === b;
+  }
 }

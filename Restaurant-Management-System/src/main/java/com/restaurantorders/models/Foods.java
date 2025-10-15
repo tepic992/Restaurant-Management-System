@@ -27,7 +27,7 @@ public class Foods implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="FOODS_FOODID_GENERATOR", sequenceName="FOOD_SEQUENCE", allocationSize=1)
+	@SequenceGenerator(name="FOODS_FOODID_GENERATOR", sequenceName="FOODS_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="FOODS_FOODID_GENERATOR")
 	@Column(name="food_id")
 	private Integer foodId;

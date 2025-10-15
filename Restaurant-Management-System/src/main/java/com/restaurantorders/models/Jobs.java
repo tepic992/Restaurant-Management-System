@@ -25,7 +25,7 @@ public class Jobs implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="JOBS_JOBID_GENERATOR", sequenceName="JOB_SEQUENCE", allocationSize=1)
+	@SequenceGenerator(name="JOBS_JOBID_GENERATOR", sequenceName="JOBS_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="JOBS_JOBID_GENERATOR")
 	@Column(name="job_id")
 	private Integer jobId;

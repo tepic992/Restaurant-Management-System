@@ -2,6 +2,7 @@ package com.restaurantorders.controllers;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class CustomerRestController {
 	public ResponseEntity<Customers> getOne(@PathVariable("customer_id") Integer id) {
 
 		if (customerRepository.findById(id).isPresent()) {
-			Customers customers = customerRepository.getOne(id);
+			Customers customers = customerRepository.findById(id).get();
 			return new ResponseEntity<>(customers, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -60,30 +61,28 @@ public class CustomerRestController {
 		return ResponseEntity.created(location).body(savedCustomers);
 	}
 	
-	@PutMapping(value = "customers/{customer_id}")
-	public ResponseEntity<Customers> updateCustomers(@RequestBody Customers customers, @PathVariable("customer_id")Integer id){
-		if (customerRepository.existsById(id)) {
-			customers.setCustomerId(id);
-			Customers savedCustomers = customerRepository.save(customers);
-			return ResponseEntity.ok().body(savedCustomers);
-		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	@PutMapping("/customers/{id}")
+	public ResponseEntity<Customers> updateCustomer(@PathVariable Integer id, @RequestBody Customers customer) {
+	    Optional<Customers> existingCustomer = customerRepository.findById(id);
+	    if (existingCustomer.isPresent()) {
+	        Customers c = existingCustomer.get();
+	        c.setCustomerName(customer.getCustomerName());
+	        c.setCustomerLastName(customer.getCustomerLastName());
+	        c.setCustomerAddress(customer.getCustomerAddress());
+	        c.setCustomerPhone(customer.getCustomerPhone());
+	        customerRepository.save(c);
+	        return ResponseEntity.ok(c);
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
 	}
 	
 	@DeleteMapping("customers/{customer_id}")
-	public ResponseEntity<HttpStatus> delete(@PathVariable Integer id){
-		if(id==-100 && !customerRepository.existsById(id)) {
-			jdbcTemplate.execute("INSERT INTO customers (\"customer_id\",\"customer_address\", \"customer_last_name\","
-					+ "\"customer_name\", \"customer_phone\",)"
-					+ " VALUES (-100, 'null', 'null', 'null', 'null')");
-		}
-
-		if (customerRepository.existsById(id)) {
-			customerRepository.deleteById(id);
-			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-		}
-
-		return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
-	}	
-	
+	public ResponseEntity<Void> deleteCustomer(@PathVariable("customer_id") Integer id) {
+	    if (customerRepository.existsById(id)) {
+	        customerRepository.deleteById(id);
+	        return ResponseEntity.ok().build();
+	    }
+	    return ResponseEntity.notFound().build();
+	}
 }

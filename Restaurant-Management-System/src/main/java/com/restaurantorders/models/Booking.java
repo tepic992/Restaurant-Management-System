@@ -36,7 +36,7 @@ public class Booking implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="BOOKING_BOOKINGID_GENERATOR", sequenceName="BOOKING_SEQUENCE", allocationSize=1)
+	@SequenceGenerator(name="BOOKING_BOOKINGID_GENERATOR", sequenceName="BOOKINGS_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BOOKING_BOOKINGID_GENERATOR")
 	
 	@Column(name="booking_id")

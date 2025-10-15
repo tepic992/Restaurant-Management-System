@@ -12,67 +12,68 @@ import { EmployeesService } from 'src/app/services/employees.service';
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.css']
 })
-export class EmployeesComponent implements OnInit{
-  
-  displayedColumns = ['employeeId', 'employeeAddress', 'employeeLastName', 'employeeName', 'employeePhone',
-   'employeeSalary', 'jobs', 'actions'];
+export class EmployeesComponent implements OnInit {
 
+  displayedColumns = ['employeeId', 'employeeAddress', 'employeeLastName', 'employeeName', 'employeePhone', 'employeeSalary', 'jobs', 'actions'];
   dataSource: MatTableDataSource<Employees>;
 
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
-  @ViewChild(MatSort)
-  sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public employeesService: EmployeesService,
-              public dialog: MatDialog) {
+  constructor(
+    private employeesService: EmployeesService,
+    public dialog: MatDialog
+  ) {}
 
-  }
-   
-  
   ngOnInit(): void {
     this.loadData();
   }
 
-  public loadData(){
+  loadData(): void {
     this.employeesService.getAllEmployees().subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
-      this.dataSource.sortingDataAccessor = (data, property) => {
-        switch(property) {
-          case 'employeeId': return data[property];
-          case 'employeeAddress': return data[property];
-          case 'employeeLastName': return data[property];
-          case 'employeeName': return data[property].toString();
-          case 'employeePhone': return data[property];
-          case 'employeeSalary': return data[property];
-          case 'jobs': return data[property];
-          default: return "default";
+
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        switch (property) {
+          case 'jobs': return item.job?.jobTitle?.toLowerCase() || '';
+          default: return item[property];
         }
+      };
+
+      this.dataSource.filterPredicate = (data: Employees, filter: string): boolean => {
+        const fullString = `
+          ${data.employeeId}
+          ${data.employeeAddress}
+          ${data.employeeLastName}
+          ${data.employeeName}
+          ${data.employeePhone}
+          ${data.employeeSalary}
+          ${data.job?.jobTitle}
+        `.toLowerCase();
+
+        return fullString.includes(filter.trim().toLowerCase());
       };
 
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
-  }  
-
-  public openDialog(flag: number, employeeId: number, employeeAddress: string, employeeLastName: string, employeeName: string, employeePhone: number, employeeSalary: number, job: string) {
-    const dialog = this.dialog.open(EmployeesDialogComponent, {data: {employeeId: employeeId, employeeAddress: employeeAddress, employeeLastName:employeeLastName,
-       employeeName:employeeName, employeePhone:employeePhone, employeeSalary:employeeSalary, job: job}});
-    dialog.componentInstance.flag = flag;
-    dialog.afterClosed().subscribe(result => {
-      if (result === 1) {
-        setTimeout(() => {
-          this.loadData();
-        }, 100)       
-      }
-    })
   }
 
+  openDialog(flag: number, employee?: Employees): void {
+    const dialogRef = this.dialog.open(EmployeesDialogComponent, {
+      data: employee ? { ...employee } : {}
+    });
 
+    dialogRef.componentInstance.flag = flag;
 
-  applyFilter(filterValue: string){
-    filterValue.trim();
-    filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        this.loadData();
+      }
+    });
+  }
+
+  applyFilter(filterValue: string): void {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }
